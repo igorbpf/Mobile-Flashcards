@@ -11,4 +11,3 @@ yarn install
 ## Start app
 
 yarn run start
->>>>>>> a7dffe65775670bf69321950807aa86f186a4aca
