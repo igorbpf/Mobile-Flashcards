@@ -34,8 +34,17 @@ export default class NewDeck extends Component {
         })
     }
 
-    goToAddCard = () => {
-        this.props.navigation.navigate('DeckDetail', { name: this.state.deckName })
+    goToDeckDetail = () => {
+        const { deckName } = this.state
+        this.setState({
+            deckName: ''
+        }, () => {
+                this.setState({
+                    isValid: false
+                }, () => {
+                    this.props.navigation.navigate('DeckDetail', { name: deckName })
+                })
+        })
     }
 
     showFail = (err) => {
@@ -47,7 +56,7 @@ export default class NewDeck extends Component {
 
     submitDeck = () => {
         saveDeckTitle(this.state.deckName)
-            .then(this.goToAddCard)
+            .then(this.goToDeckDetail)
             .catch(this.showFail)
     }
 
@@ -60,7 +69,7 @@ export default class NewDeck extends Component {
                 <TextInput
                  placeholder='Deck Name'
                  style={styles.textInput}
-                 value={this.deckName}
+                 value={this.state.deckName}
                  onChangeText={this.handleTextChange}
              />
              <TouchableOpacity
