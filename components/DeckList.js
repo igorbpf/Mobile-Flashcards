@@ -8,15 +8,24 @@ import { Entypo } from '@expo/vector-icons';
 export default class DeckList extends Component {
 
     state = {
-        decks: []
+        decks: [],
+        listener: null,
     }
 
     componentDidMount(){
+        const deckListener = this.props.navigation.addListener('didFocus', () => {
+            this.fetchData()
+        });
+        this.setState({ listener: deckListener })
+    }
+
+    fetchData = () => {
         getDecks()
             .then(resp => {
                 this.setState({ decks: Object.values(JSON.parse(resp)).reverse() })
             })
             .catch(err => console.warn(err))
+
     }
 
     renderItem = ({ item }) => {
@@ -27,6 +36,10 @@ export default class DeckList extends Component {
                 <DeckListItem {...item} />
             </TouchableOpacity>
         )
+    }
+
+    componentWillUnmount(){
+        this.state.listener.remove();
     }
 
     render(){

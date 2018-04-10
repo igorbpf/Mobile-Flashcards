@@ -14,9 +14,17 @@ export default class DeckDetail extends Component {
     state = {
         card: undefined,
         bounceValue: new Animated.Value(1),
+        listener: null,
     }
 
     componentDidMount(){
+        const cardsListener = this.props.navigation.addListener('didFocus', () => {
+            this.fetchData()
+        });
+        this.setState({ listener: cardsListener })
+    }
+
+    fetchData = () => {
         const { bounceValue } = this.state
         const title = this.props.navigation.state.params.name
 
@@ -40,6 +48,10 @@ export default class DeckDetail extends Component {
 
     startQuiz = () => {
         this.props.navigation.navigate('Quiz', { card: this.state.card })
+    }
+
+    componentWillUnmount(){
+        this.state.listener.remove();
     }
 
     render(){
